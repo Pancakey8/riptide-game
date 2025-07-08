@@ -3,13 +3,7 @@
 
 void Loop::init() {
   player.camera = &camera;
-  player.tiles = &tiles;
-  for (int i = 0; i < 10; ++i) {
-    Tile t;
-    t.pos = {(float)100 * i, 100};
-    t.window = window;
-    tiles.push_back(t);
-  }
+  player.update_tiles();
   window->setMouseCursorVisible(false);
 }
 void Loop::update(double dt) {
@@ -23,9 +17,6 @@ void Loop::render() {
   cursor.setFillColor(sf::Color::Black);
   cursor.setPosition(camera.get_cursor() - sf::Vector2f{10, 10});
   window->draw(cursor);
-  for (auto tile : tiles) {
-    tile.render();
-  }
   window->display();
 }
 

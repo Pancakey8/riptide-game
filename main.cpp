@@ -3,7 +3,7 @@
 
 int main() {
   auto desktop = sf::VideoMode::getDesktopMode();
-  sf::RenderWindow window(sf::VideoMode({800, 600}), "Riptide");
+  sf::RenderWindow window(desktop, "Riptide");
   Loop loop(&window);
 
   loop.init();
