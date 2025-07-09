@@ -1,6 +1,7 @@
 #include "src/loop.hpp"
 #include "src/time.hpp"
 #include <cmath>
+#include <fstream>
 #include <map>
 
 std::unordered_set<Chunk, ChunkHash>
@@ -32,6 +33,7 @@ int main() {
   sf::Mouse::Button unknown_button = (sf::Mouse::Button)-1;
   sf::Mouse::Button button = unknown_button;
   int current_tile = 0;
+
   while (window.isOpen()) {
     while (const auto event = window.pollEvent()) {
       if (event->is<sf::Event::Closed>())
@@ -57,6 +59,26 @@ int main() {
         key <= sf::Keyboard::Key::Num9) {
       current_tile =
           10 * current_tile + (int)key - (int)sf::Keyboard::Key::Num0;
+    }
+
+    if (have_key && sf::Keyboard::Key::L == key) {
+      std::ifstream fb("./map.txt");
+      for (std::string line; std::getline(fb, line);) {
+        auto chunk_data = split(line, ",");
+        if (chunk_data.size() < 2)
+          continue;
+        int cx = std::stof(chunk_data[0]);
+        int cy = std::stof(chunk_data[1]);
+
+        std::vector<TileId> tiles;
+
+        for (int i = 2; i < chunk_data.size(); ++i) {
+          tiles.push_back((TileId)std::stof(chunk_data[i]));
+        }
+        chunks.emplace(std::make_pair(cx, cy), tiles);
+
+        chunk_set = update_chunks(&window, chunks);
+      }
     }
 
     if ((have_key && sf::Keyboard::Key::Enter == key) ||
@@ -92,6 +114,10 @@ int main() {
 
     if (have_key && sf::Keyboard::Key::Backspace == key) {
       current_tile = 0;
+    }
+
+    if (have_key && sf::Keyboard::Key::S == key) {
+      Chunk::save(chunks, "./map.txt");
     }
 
     have_key = false;

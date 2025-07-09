@@ -18,19 +18,14 @@ void Player::update_tiles() {
       int j = d - i;
       for (int x : {i, -1 * i}) {
         for (int y : {j, -1 * j}) {
-          Chunk ch{window,
-                   {last_chunk.x + (float)x, last_chunk.y + (float)y},
-                   {WALL,       WALL,       BACKGROUND, WALL,       WALL,
-                    WALL,       BACKGROUND, BACKGROUND, BACKGROUND, WALL,
-                    BACKGROUND, BACKGROUND, BACKGROUND, BACKGROUND, BACKGROUND,
-                    WALL,       BACKGROUND, BACKGROUND, BACKGROUND, WALL,
-                    WALL,       WALL,       BACKGROUND, WALL,       WALL}};
-          if (do_clean) {
-            clean.insert(ch);
-          } else {
-            chunks.insert(ch);
+          auto chunk = Chunk::load(window, x, y, "./map.txt");
+          if (chunk.has_value()) {
+            if (do_clean) {
+              clean.insert(chunk.value());
+            } else {
+              chunks.insert(chunk.value());
+            }
           }
-          printf("Loaded %f,%f\n", ch.pos.x, ch.pos.y);
         }
       }
     }
