@@ -7,3 +7,7 @@ file(GLOB SRC_FILES src/*.hpp src/*.cpp)
 add_executable(riptide-game main.cpp ${SRC_FILES})
 target_compile_features(riptide-game PRIVATE cxx_std_17)
 target_link_libraries(riptide-game PRIVATE SFML::Graphics)
+
+add_executable(riptide-editor editor.cpp ${SRC_FILES})
+target_compile_features(riptide-editor PRIVATE cxx_std_17)
+target_link_libraries(riptide-editor PRIVATE SFML::Graphics)

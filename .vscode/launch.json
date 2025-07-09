@@ -5,10 +5,28 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "C/C++ Debug (gdb Launch)",
+            "name": "Debug: riptide-game",
             "type": "cppdbg",
             "request": "launch",
             "program": "${workspaceFolder}/build/riptide-game",
+            "args": [],
+            "stopAtEntry": true,
+            "cwd": "${workspaceFolder}",
+            "environment": [],
+            "MIMode": "gdb",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                }
+            ]
+        },
+        {
+            "name": "Debug: riptide-editor",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/build/riptide-editor",
             "args": [],
             "stopAtEntry": true,
             "cwd": "${workspaceFolder}",
