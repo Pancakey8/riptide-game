@@ -2,9 +2,45 @@
 #include <cmath>
 #include <fstream>
 
-bool Tile::does_collide(sf::Vector2f opos, sf::Vector2f osize) {
-  return pos.x < opos.x + osize.x && pos.x + TILE_SIZE[0] > opos.x &&
-         pos.y < opos.y + osize.y && pos.y + TILE_SIZE[1] > opos.y;
+bool Tile::does_collide(sf::Vector2f opos, sf::Vector2f osize,
+                        sf::Vector2f velo, float &t_hit) {
+  sf::Vector2f inv_entry, inv_exit;
+
+  if (velo.x > 0.0f) {
+    inv_entry.x = pos.x - (opos.x + osize.x);
+    inv_exit.x = (pos.x + TILE_SIZE[0]) - opos.x;
+  } else {
+    inv_entry.x = (pos.x + TILE_SIZE[0]) - opos.x;
+    inv_exit.x = pos.x - (opos.x + osize.x);
+  }
+
+  if (velo.y > 0.0f) {
+    inv_entry.y = pos.y - (opos.y + osize.y);
+    inv_exit.y = (pos.y + TILE_SIZE[1]) - opos.y;
+  } else {
+    inv_entry.y = (pos.y + TILE_SIZE[1]) - opos.y;
+    inv_exit.y = pos.y - (opos.y + osize.y);
+  }
+
+  sf::Vector2f entry, exit;
+
+  entry.x = (velo.x == 0.0f) ? -INFINITY : inv_entry.x / velo.x;
+  exit.x = (velo.x == 0.0f) ? INFINITY : inv_exit.x / velo.x;
+
+  entry.y = (velo.y == 0.0f) ? -INFINITY : inv_entry.y / velo.y;
+  exit.y = (velo.y == 0.0f) ? INFINITY : inv_exit.y / velo.y;
+
+  float entryTime = std::max(entry.x, entry.y);
+  float exitTime = std::min(exit.x, exit.y);
+
+  if (entryTime > exitTime || (entry.x < 0.0f && entry.y < 0.0f) ||
+      entryTime > 1.0f) {
+    t_hit = 1.0f;
+    return false;
+  }
+
+  t_hit = entryTime;
+  return true;
 }
 
 void Tile::render() {

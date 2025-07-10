@@ -1,8 +1,9 @@
-#include "src/loop.hpp"
+#include "src/camera.hpp"
 #include "src/time.hpp"
 #include <cmath>
 #include <fstream>
 #include <map>
+#include <unordered_set>
 
 std::unordered_set<Chunk, ChunkHash>
 update_chunks(sf::RenderWindow *win,

@@ -88,18 +88,23 @@ void Player::update(double dt) {
         }
       }
     }
-    for (auto tile : tiles) {
-      if (tile.does_collide(top_left() + delta_move, size)) {
-        do_collide = true;
-        collides_with = tile;
+
+    float earliest_t = 1.0f;
+    Tile first_colliding_tile;
+
+    for (auto &tile : tiles) {
+      float t_hit;
+      if (tile.does_collide(top_left(), size, delta_move, t_hit)) {
+        if (t_hit < earliest_t) {
+          earliest_t = t_hit;
+          first_colliding_tile = tile;
+          do_collide = true;
+        }
       }
     }
 
     if (do_collide) {
-      while (!collides_with.does_collide(top_left(), size)) {
-        pos += (float)0.01 * delta_move / delta_move.length();
-      }
-      pos -= (float)0.01 * (collides_with.pos - top_left());
+      pos += delta_move * earliest_t;
       is_moving_to_target = false;
     } else {
       pos += delta_move;

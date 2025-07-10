@@ -13,7 +13,8 @@ public:
   sf::Vector2f pos;
   TileId id;
   sf::RenderWindow *window;
-  bool does_collide(sf::Vector2f pos, sf::Vector2f size);
+  bool does_collide(sf::Vector2f opos, sf::Vector2f osize, sf::Vector2f velo,
+                    float &t_hit);
   void render();
 };
 
