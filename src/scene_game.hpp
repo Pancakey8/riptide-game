@@ -8,6 +8,8 @@ public:
   Player player;
   Camera camera;
 
+  std::shared_ptr<ProgressBar> dash_timer;
+
   void init() override;
   void update(double dt) override;
   void render() override;

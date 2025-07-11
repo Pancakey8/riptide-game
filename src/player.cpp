@@ -116,6 +116,27 @@ void Player::update(double dt) {
     last_chunk = chunk_now;
     update_tiles();
   }
+
+  for (auto it = abilities.begin(); it != abilities.end();) {
+    if ((*it)->is_alive()) {
+      (*it)->update(dt);
+      ++it;
+    } else {
+      it = abilities.erase(it);
+    }
+  }
+}
+
+void Player::event(sf::Event event) {
+  if (event.is<sf::Event::KeyPressed>() &&
+      event.getIf<sf::Event::KeyPressed>()->code == sf::Keyboard::Key::Q) {
+    std::shared_ptr<Projectile> proj = std::make_shared<Projectile>(window);
+    proj->direction = window->mapPixelToCoords(sf::Mouse::getPosition()) - pos;
+    proj->direction = proj->direction.normalized();
+    proj->pos = pos + proj->direction * (size.length() / 2);
+    proj->cooldown = 5;
+    abilities.push_back(proj);
+  }
 }
 
 void Player::render() {
@@ -138,5 +159,8 @@ void Player::render() {
   }
   for (auto chunk : chunks) {
     chunk.render();
+  }
+  for (auto &ability : abilities) {
+    ability->render();
   }
 }

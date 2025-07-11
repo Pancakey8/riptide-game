@@ -1,3 +1,4 @@
+#include "ability.hpp"
 #include "camera.hpp"
 #include "time.hpp"
 #include <SFML/Graphics.hpp>
@@ -17,6 +18,7 @@ public:
   double dash_duration = 0.2;
   double dash_cooldown = 2;
   float dash_distance = 3 * vel;
+  std::vector<std::shared_ptr<Ability>> abilities;
   sf::Vector2f dash_direction;
   sf::RenderWindow *window;
   sf::Vector2f last_chunk{0, 0};
@@ -25,4 +27,5 @@ public:
   void update_tiles();
   void update(double dt);
   void render();
+  void event(sf::Event event);
 };
